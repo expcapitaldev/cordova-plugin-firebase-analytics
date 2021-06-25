@@ -78,4 +78,13 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)getAppInstanceId:(CDVInvokedUrlCommand *)command {
+
+	[self.commandDelegate runInBackground:^{
+		NSString *appInstanceID = [FIRAnalytics appInstanceID];
+		CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:appInstanceID];
+		[self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+	}];
+}
+
 @end

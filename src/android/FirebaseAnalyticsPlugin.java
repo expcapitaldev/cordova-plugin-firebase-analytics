@@ -4,9 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import by.chemerisuk.cordova.support.CordovaMethod;
 import by.chemerisuk.cordova.support.ReflectiveCordovaPlugin;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.cordova.CallbackContext;
@@ -104,4 +108,40 @@ public class FirebaseAnalyticsPlugin extends ReflectiveCordovaPlugin {
 
         return bundle;
     }
+
+	@CordovaMethod()
+	private void getAppInstanceId(CallbackContext callbackContext) {
+		Task<String> task = this.firebaseAnalytics.getAppInstanceId();
+
+		task.addOnSuccessListener(new OnSuccessListener<String>() {
+			@Override
+			public void onSuccess(String string) {
+				callbackContext.success(string);
+			}
+		});
+
+		task.addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception e) {
+				try {
+					Log.e(TAG, "Error retrieving instance id: ", e);
+					callbackContext.error(exceptionToJson(task.getException()));
+				} catch (JSONException jsonErr) {
+					Log.e(TAG, "Error when parsing json", jsonErr);
+					callbackContext.error(jsonErr.getMessage());
+				}
+
+			}
+		});
+	}
+
+	private JSONObject exceptionToJson(final Exception exception) throws JSONException {
+		return new JSONObject() {
+			{
+				put("message", exception.getMessage());
+				put("cause", exception.getClass().getName());
+				put("stacktrace", exception.getStackTrace().toString());
+			}
+		};
+	}
 }

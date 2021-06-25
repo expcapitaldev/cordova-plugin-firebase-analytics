@@ -48,5 +48,10 @@ module.exports = {
 
             exec(resolve, reject, PLUGIN_NAME, "setDefaultEventParameters", [defaults || {}]);
         });
-    }
+    },
+	getAppInstanceId: function() {
+		return new Promise(function(resolve, reject) {
+			exec(resolve, reject, PLUGIN_NAME, "getAppInstanceId", []);
+		});
+	},
 };
