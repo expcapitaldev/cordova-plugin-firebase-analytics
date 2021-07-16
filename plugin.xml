@@ -1,7 +1,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="cordova-plugin-firebase-analytics"
-      version="5.0.0-dev-2-0">
+      version="5.0.0-dev-3-0">
 
     <name>FirebaseAnalyticsPlugin</name>
     <description>Cordova plugin for Firebase Analytics</description>
@@ -57,6 +57,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
                 <pod name="Firebase/Analytics" spec="$IOS_FIREBASE_ANALYTICS_VERSION" />
             </pods>
         </podspec>
+
+		<framework src="AdSupport.framework" weak="true" />
     </platform>
 
     <platform name="android">
